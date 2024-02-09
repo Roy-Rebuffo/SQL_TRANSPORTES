@@ -1,0 +1,45 @@
+create database empresaPTHib;
+use empresaPTHib;
+
+create  table camioneros(
+	DNI int unsigned,
+	Nombre varchar(30) not null,
+	Telefono varchar(9) not null,
+	Direccion varchar(30) default "Madrid",
+	Salario int not null,
+	Poblacion varchar(40),
+	primary key (DNI)
+);
+create table camiones (
+    Matricula NOT NULL,
+    Potencia INT,
+    Tipo VARCHAR(50),
+    Modelo VARCHAR(50),
+    PRIMARY KEY (Matricula),
+    CONSTRAINT matricula_formato_correcto CHECK (Matricula REGEXP '^[0-9]+[A-Za-z]+$')
+);
+create table provincias(
+	codProvincia int unsigned not null, 
+	Nombre varchar(30) not null,
+	primary key (codProvincia)
+);
+create table paquetes(
+	codPaquete int unsigned not null,
+	Descripcion varchar(50) default "propio",
+	Destinatario varchar(50) not null,
+	Direccion varchar(50) not null,
+	codCamionero int unsigned not null,
+	codProvincia int unsigned not null,
+	primary key(codPaquete),
+	foreign key(codCamionero) references camioneros(DNI),
+	foreign key(codProvincia) references provincias(codProvincia)
+);
+create table conduce (
+    idConduce INT UNSIGNED NOT NULL,
+    codCamionero INT UNSIGNED NOT NULL,
+    codCamion NOT NULL,
+    fecha DATE,
+    PRIMARY KEY (idConduce),
+    FOREIGN KEY (codCamionero) references camioneros(DNI),
+    FOREIGN KEY (codCamion) references camiones(Matricula)
+);
